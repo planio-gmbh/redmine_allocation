@@ -7,41 +7,48 @@
     method = :post
   end
 %>
+
 <td>
-  <% remote_form_for(:allocation,
-                     member,
-                     :url => url,
-                     :method => method) do |f| %>
-    <%= f.select :allocation, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }), {}, :id => "member-#{member.id}-allocation" %>
-    <%= observe_field("member-#{member.id}-allocation",
-                      :url => url,
-                      :method => method,
-                      :with => "allocation[allocation]") %>
+  <%= form_for :allocation,
+               :as => member,
+               :html => {:id => "allocation_form_#{member.id}"},
+               :url => url,
+               :remote => true,
+               :method => method do |f| %>
+    <%= f.select :allocation, 
+                 options_for_select(((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }),member[:allocation]), 
+                 {}, 
+                 :id => "member-#{member.id}-allocation", 
+                 :onchange => "$('#allocation_form_#{member.id}').submit();" %>
   <% end %>
 </td>
 <td>
-  <% remote_form_for(:allocation,
-                     member,
-                     :url => url,
-                     :method => method) do |f| %>
-    <%= f.text_field :from_date, :size => 10, :id => "member-#{member.id}-from_date" %><%= calendar_for("member-#{member.id}-from_date") %>
-    <%= observe_field("member-#{member.id}-from_date",
-                      :frequency => 0.5,
-                      :url => url,
-                      :method => method,
-                      :with => "allocation[from_date]") %>
+  <%= form_for :allocation,
+               :as => member,
+               :html => {:id => "from_date_form_#{member.id}"},
+               :url => url,
+               :remote => true,
+               :method => method do |f| %>
+    <%= f.text_field :from_date, 
+                     :size => 10, 
+                     :id => "member-#{member.id}-from_date", 
+                     :value => member[:from_date], 
+                     :onchange => "$('#from_date_form_#{member.id}').submit();" %>
+    <%= calendar_for("member-#{member.id}-from_date") %>
   <% end %>
 </td>
 <td>
-  <% remote_form_for(:allocation,
-                     member,
-                     :url => url,
-                     :method => method) do |f| %>
-    <%= f.text_field :to_date, :size => 10, :id => "member-#{member.id}-to_date" %><%= calendar_for("member-#{member.id}-to_date") %>
-    <%= observe_field("member-#{member.id}-to_date",
-                      :frequency => 0.5,
-                      :url => url,
-                      :method => method,
-                      :with => "allocation[to_date]") %>
+  <%= form_for :allocation,
+               :as => member,
+               :html => {:id => "to_date_form_#{member.id}"},
+               :url => url,
+               :remote => true,
+               :method => method do |f| %>
+    <%= f.text_field :to_date, 
+                     :size => 10, 
+                     :id => "member-#{member.id}-to_date", 
+                     :value => member[:to_date], 
+                     :onchange => "$('#to_date_form_#{member.id}').submit();"%>
+    <%= calendar_for("member-#{member.id}-to_date") %>
   <% end %>
 </td>

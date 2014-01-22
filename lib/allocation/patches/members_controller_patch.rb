@@ -1,4 +1,4 @@
-require 'dispatcher'
+require 'dispatcher' unless Rails::VERSION::MAJOR >= 3
 require_dependency 'members_controller'
 
 module Allocation
@@ -29,6 +29,12 @@ module Allocation
   end
 end
 
-Dispatcher.to_prepare do
-  MembersController.send(:include, Allocation::Patches::MembersControllerPatch)
+if Rails::VERSION::MAJOR >= 3
+  ActionDispatch::Callbacks.to_prepare do
+    MembersController.send(:include, Allocation::Patches::MembersControllerPatch)
+  end
+else
+  Dispatcher.to_prepare do
+    MembersController.send(:include, Allocation::Patches::MembersControllerPatch)
+  end
 end
